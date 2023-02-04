@@ -32,8 +32,10 @@ class ParserCron extends Command
     public function handle()
     {
         $url = "http://static.feed.rbc.ru/rbc/logical/footer/news.rss"; 
+
         $response = Http::get($url);
         $items = new SimpleXMLElement($response);
+        
         foreach ($items->channel->item as $item) {
             if (News::where('guid', $item->children('rbc_news', TRUE)->news_id)->doesntExist()) {
                 $pictureUrl = $item->children('rbc_news', TRUE)->image->url;
